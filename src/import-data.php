@@ -22,30 +22,30 @@ if(isset($_POST['importSubmit'])){
             // Parse data from CSV file line by line
             while(($line = fgetcsv($csvFile)) !== FALSE){
                 // Get row data
-                $name   = $line[0];
-                $email  = $line[1];
-                $phone  = $line[2];
-                $status = $line[3];
+                $orderNumber  = $line[0];
+                $orderPlaced  = $line[1];
+                $orderFilled  = $line[2];
+                $itemDesc     = $line[3];
+                $email        = $line[4];
+                $firstName    = $line[5];
+                $lastName     = $line[6];
+                $address1     = $line[7];
+                $address2     = $line[8];
+                $city         = $line[9];
+                $state        = $line[10];
+                $zip          = $line[11];
+                $phoneNumber  = $line[12];
                 
-                // Check whether member already exists in the database with the same email
-                $prevQuery = "SELECT id FROM orders WHERE email = '".$line[1]."'";
-                $prevResult = $db->query($prevQuery);
-                
-                if($prevResult->num_rows > 0){
-                    // Update member data in the database
-                    $db->query("UPDATE orders SET name = '".$name."', phone = '".$phone."', status = '".$status."', modified = NOW() WHERE email = '".$email."'");
-                }else{
-                    // Insert member data in the database
-                    $db->query("INSERT INTO orders (name, email, phone, created, modified, status) VALUES ('".$name."', '".$email."', '".$phone."', NOW(), NOW(), '".$status."')");
-                }
+                // Insert member data in the database
+                $db->query("INSERT INTO orders (orderNumber, orderPlaced, orderFilled, itemDesc, email, firstName, lastName, address1, address2, city, state, zip, phoneNumber, created, modified) VALUES ('$orderNumber', '$orderPlaced', '$orderFilled', '$itemDesc', '$email', '$firstName', '$lastName', '$address1', '$address2', '$city', '$state', '$zip', '$phoneNumber', NOW(), NOW())");
             }
             
             // Close opened CSV file
             fclose($csvFile);
             
-            $qstring = '?status=succ';
+            $qstring = '?status=success';
         }else{
-            $qstring = '?status=err';
+            $qstring = '?status=error';
         }
     }else{
         $qstring = '?status=invalid_file';
@@ -53,4 +53,6 @@ if(isset($_POST['importSubmit'])){
 }
 
 // Redirect to the listing page
-//header("Location: index.php".$qstring);
+header("Location: index.php".$qstring);
+
+?>

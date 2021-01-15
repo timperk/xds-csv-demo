@@ -131,6 +131,11 @@ gulp.task('images', () => {
     .pipe(browserSync.stream());
 });
 
+gulp.task('apache', () => {
+  return gulp.src([ src_assets_folder + 'apache/.htaccess' ])
+    .pipe(gulp.dest(dist_folder))
+});
+
 gulp.task('vendor', () => {
   if (node_dependencies.length === 0) {
     return new Promise((resolve) => {
@@ -147,7 +152,7 @@ gulp.task('vendor', () => {
     .pipe(browserSync.stream());
 });
 
-gulp.task('build', gulp.series('clear', 'html', 'pug', 'sass', 'less', 'stylus', 'js', 'images', 'vendor'));
+gulp.task('build', gulp.series('clear', 'html', 'pug', 'sass', 'less', 'stylus', 'js', 'images', 'apache', 'vendor'));
 
 gulp.task('dev', gulp.series('html', 'pug', 'sass', 'less', 'stylus', 'js'));
 
